@@ -16,6 +16,7 @@ function App() {
   const [newYear, setNewYear] = useState(0);
   const [editStates, setEditStates] = useState<{ [key: number]: { title: boolean; year: boolean } }>({});
   const inputRef = useRef<HTMLInputElement>(null);
+  const baseURL = process.env.CLIENT_PROD_URL || process.env.CLIENT_LOCAL_URL;
 
   const handleClickOutside = (event: MouseEvent) => {
       if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
@@ -54,7 +55,7 @@ function App() {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/books/");
+      const response = await fetch(`${baseURL}/api/books/`);
       const data = await response.json();
       setBooks(data);
     } catch (err) {
@@ -68,7 +69,7 @@ function App() {
       release_year: releaseYear,
     };
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/books/create/", {
+      const response = await fetch(`${baseURL}/api/books/create/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +85,7 @@ function App() {
   };
 
   const updateBook = async (id: number, title: string, year: number ) => {
-    await fetch(`http://127.0.0.1:8000/api/books/${id}`, {
+    await fetch(`${baseURL}/api/books/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -96,7 +97,7 @@ function App() {
 
   const deleteBook = async (pk: number) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/books/${pk}`, {
+      const response = await fetch(`${baseURL}/api/books/${pk}`, {
         method: "DELETE",
       });
 
